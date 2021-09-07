@@ -1,10 +1,13 @@
-extern crate defer_macro;
+//#![cfg(proc_macro_hygiene)]
+#![feature(proc_macro_hygiene)]
+
 extern crate defer_lib;
+extern crate defer_macro;
 
 pub use defer_lib::{*};
 pub use defer_macro::{*};
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests {
     use super::{*};
 
@@ -16,6 +19,17 @@ mod tests {
         return;
 
         defer! { println!("after exit"); }
+    }
+
+    //#[test]
+    #[use_defer]
+    fn closure() {
+        #[use_defer]
+        let closure = || {
+            defer! { println!("closure") }
+        }; defer! { closure() }
+
+        println!("fn");
     }
 
     #[test]

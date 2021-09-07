@@ -1,17 +1,23 @@
 #![feature(fn_traits)]
 #![feature(box_syntax)]
+#![feature(default_free_fn)]
+
+use std::default::default;
+use std::collections::LinkedList;
+
+type DeferContainer<T> = LinkedList<T>;
 
 pub struct Defer {
-    at_exit: Vec<Box<dyn FnMut()>>
+    at_exit: DeferContainer<Box<dyn FnMut()>>
 }
 
 impl Defer {
     pub fn new() -> Self {
-        Self { at_exit: vec![] }
+        Self { at_exit: default() }
     }
 
     pub fn push(&mut self, callback: Box<dyn FnMut()>) {
-        self.at_exit.push(callback)
+        self.at_exit.push_back(callback)
     }
 }
 
