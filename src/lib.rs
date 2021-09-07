@@ -1,3 +1,5 @@
+#![feature(proc_macro_hygiene)]
+
 extern crate defer_lib;
 extern crate defer_macro;
 
@@ -16,6 +18,17 @@ mod tests {
         return;
 
         defer! { println!("after exit"); }
+    }
+
+    #[test]
+    #[use_defer]
+    fn closure() {
+        #[use_defer]
+        let closure = || {
+            defer! { println!("closure") }
+        }; defer! { closure() }
+
+        println!("fn");
     }
 
     #[test]
