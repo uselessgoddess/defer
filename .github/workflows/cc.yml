@@ -2,9 +2,9 @@ name: CC
 
 on:
   push:
-    branches: [ master ]
+    branches: [ nigtly, stable ]
   pull_request:
-    branches: [ master ]
+    branches: [ nigtly, stable ]
 
 env:
   CARGO_TERM_COLOR: always
