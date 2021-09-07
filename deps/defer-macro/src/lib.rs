@@ -22,7 +22,7 @@ pub fn use_defer(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 #[proc_macro]
 pub fn defer(item: TokenStream) -> TokenStream {
-    format!("{defer_name}.push(Box::new(|| {{ {body} }}));",
+    format!("{defer_name}.push(Box::new(move || {{ {body} }}));",
         defer_name = DEFER_NAME,
         body = item.to_string()
     ).parse().unwrap()

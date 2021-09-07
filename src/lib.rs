@@ -17,4 +17,13 @@ mod tests {
 
         defer! { println!("after exit"); }
     }
+
+    #[test]
+    #[use_defer]
+    fn error_in_naive_implementation() {
+        for i in 0..10 {
+            defer! { println!("{}", i) }
+        }
+        println!("done")
+    }
 }
