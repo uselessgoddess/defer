@@ -1,0 +1,8 @@
+[package]
+name = "defer"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+defer-lib = { path = "deps/defer-lib" }
+defer-macro = { path = "deps/defer-macro" }
