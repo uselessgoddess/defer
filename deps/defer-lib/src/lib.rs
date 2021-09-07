@@ -23,7 +23,7 @@ impl Defer {
 impl Drop for Defer {
     fn drop(&mut self) {
         for callback in (&mut self.at_exit).into_iter().rev() {
-            callback.call_mut(())
+            (callback)()
         }
     }
 }
