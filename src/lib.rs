@@ -37,7 +37,7 @@ mod tests {
             defer! { println!("defer before panic"); }
             println!("before panic");
             panic!("panic");
-        });
+        }).unwrap_err();
     }
 
     #[test]

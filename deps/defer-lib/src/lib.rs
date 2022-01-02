@@ -29,7 +29,7 @@ impl Drop for Defer {
 }
 
 mod tests {
-    use crate::Defer;
+    use super::*;
 
     #[test]
     fn test() {
