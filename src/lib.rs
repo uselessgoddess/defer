@@ -1,4 +1,5 @@
 #![feature(proc_macro_hygiene)]
+#![feature(stmt_expr_attributes)]
 
 extern crate defer_lib;
 extern crate defer_macro;
@@ -8,7 +9,8 @@ pub use defer_macro::{*};
 
 #[cfg(test)]
 mod tests {
-    use super::{*};
+    use std::panic::catch_unwind;
+    use super::*;
 
     #[test]
     #[use_defer]
@@ -22,21 +24,25 @@ mod tests {
 
     #[test]
     #[use_defer]
-    fn closure() {
-        #[use_defer]
-        let closure = || {
-            defer! { println!("closure") }
-        }; defer! { closure() }
-
-        println!("fn");
-    }
-
-    #[test]
-    #[use_defer]
     fn error_in_naive_implementation() {
         for i in 0..10 {
             defer! { println!("{}", i) }
         }
         println!("done")
+    }
+
+    #[test]
+    fn before_panic() {
+        catch_unwind(#[use_defer] || {
+            defer! { println!("defer before panic"); }
+            println!("before panic");
+            panic!("panic");
+        });
+    }
+
+    #[test]
+    fn closure() {
+        let closure = #[use_defer] || { defer! { println!("closure") } };
+        closure();
     }
 }
