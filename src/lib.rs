@@ -4,13 +4,13 @@
 extern crate defer_lib;
 extern crate defer_macro;
 
-pub use defer_lib::{*};
-pub use defer_macro::{*};
+pub use defer_lib::*;
+pub use defer_macro::*;
 
 #[cfg(test)]
 mod tests {
-    use std::panic::catch_unwind;
     use super::*;
+    use std::panic::catch_unwind;
 
     #[test]
     #[use_defer]
@@ -19,7 +19,10 @@ mod tests {
         defer! { println!("exit"); }
         return;
 
-        defer! { println!("after exit"); }
+        #[allow(unreachable_code)]
+        {
+            defer! { println!("after exit"); }
+        }
     }
 
     #[test]
@@ -33,16 +36,35 @@ mod tests {
 
     #[test]
     fn before_panic() {
-        catch_unwind(#[use_defer] || {
-            defer! { println!("defer before panic"); }
+        let closure = #[use_defer]
+        || {
+            defer! { println!("defer after panic"); }
             println!("before panic");
             panic!("panic");
-        }).unwrap_err();
+        };
+        catch_unwind(closure).unwrap_err();
     }
 
     #[test]
     fn closure() {
-        let closure = #[use_defer] || { defer! { println!("closure") } };
+        let closure = #[use_defer]
+        || {
+            defer! { println!("closure") }
+        };
         closure();
+    }
+
+    #[test]
+    #[use_defer]
+    fn use_borrowed_values() {
+        let mut v = 0;
+        let weak = &v as *const i32;
+        defer! {
+            // SAFETY: Not guaranteed, other destructors may contain ref to `v`,
+            // but in this example it is safe
+            println!("defer: {}", unsafe { *weak });
+        }
+        v = 1;
+        println!("home: {}", v);
     }
 }
