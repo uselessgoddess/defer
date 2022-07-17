@@ -1,9 +1,8 @@
 [package]
 name = "defer"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2018"
 authors = ["uselessgoddess"]
 
 [dependencies]
-defer-lib = { path = "deps/defer-lib" }
-defer-macro = { path = "deps/defer-macro" }
+defer-proc = { path = "defer-proc" }
